@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import QUESTIONS from "../questions.js";
 import image from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
@@ -10,12 +10,15 @@ export default function Quiz() {
   const [givenAnswer, setGivenAnswer] = useState([]); // To keep track for given answers from the user.
   const currentQuestionIndex = givenAnswer.length;
   const quizIsComplete = currentQuestionIndex === QUESTIONS.length; // To make sure that number of questions does not exceed the limit. (On finish point it finishes smoothly without causing the site break)
+ const handleSelectAnswer = useCallback(
+    function handleSelectAnswer(selectedAnswer) {
+        setGivenAnswer((prevUserAnswers) => {
+          return [...prevUserAnswers, selectedAnswer];
+        });
+      }, []);
+  
 
-  function handleSelectAnswer(selectedAnswer) {
-    setGivenAnswer((prevUserAnswers) => {
-      return [...prevUserAnswers, selectedAnswer];
-    });
-  }
+  const handleSkipQuestion = useCallback(() => handleSelectAnswer(null), [])
 
   if (quizIsComplete) {
     return (
@@ -35,8 +38,8 @@ export default function Quiz() {
       <div id="questions">
         <QuestionTimer
           timeout={10000}
-          onTimeout={() => handleSelectAnswer(null)}
-        />{" "}
+          onTimeout={handleSkipQuestion}
+        />
         {/*Here null tells that no answer is chosen therefore answer is null*/}
         <h2>{QUESTIONS[currentQuestionIndex].text}</h2>
         <ul id="answers">
