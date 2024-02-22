@@ -18,7 +18,7 @@ export default function Quiz() {
       }, []);
   
 
-  const handleSkipQuestion = useCallback(() => handleSelectAnswer(null), [])
+  const handleSkipQuestion = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer])
 
   if (quizIsComplete) {
     return (
@@ -37,13 +37,15 @@ export default function Quiz() {
     <div id="quiz">
       <div id="questions">
         <QuestionTimer
-          timeout={10000}
+        //  key is used because question is not reset anymore and it can't be changed after time finishes.
+        key={currentQuestionIndex}  
+        timeout={10000}
           onTimeout={handleSkipQuestion}
         />
         {/*Here null tells that no answer is chosen therefore answer is null*/}
         <h2>{QUESTIONS[currentQuestionIndex].text}</h2>
         <ul id="answers">
-          {QUESTIONS[currentQuestionIndex].answers.map((answer) => (
+          {shuffleAnswer.map((answer) => (
             <li key={answer} className="answer">
               <button onClick={() => handleSelectAnswer(answer)}>
                 {answer}
