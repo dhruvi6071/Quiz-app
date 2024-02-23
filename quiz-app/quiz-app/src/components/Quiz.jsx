@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import QUESTIONS from "../questions.js";
 import image from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
@@ -6,15 +6,24 @@ import QuestionTimer from "./QuestionTimer.jsx";
 export default function Quiz() {
   // const[currentQuestion, setCurrentQuestion] = useState(0); //To manage the data which questions are displayed
   // we can simply derive currentQuestion index using number of elements inserted into array of givenAnswers. therefore above line is not needed.
-
+  const [answerSet, setAnswerSet] = useState('')
   const [givenAnswer, setGivenAnswer] = useState([]); // To keep track for given answers from the user.
   const currentQuestionIndex = givenAnswer.length;
   const quizIsComplete = currentQuestionIndex === QUESTIONS.length; // To make sure that number of questions does not exceed the limit. (On finish point it finishes smoothly without causing the site break)
  const handleSelectAnswer = useCallback(
     function handleSelectAnswer(selectedAnswer) {
+      setAnswerSet('answered');
         setGivenAnswer((prevUserAnswers) => {
           return [...prevUserAnswers, selectedAnswer];
         });
+
+        setTimeout(() => {
+          if(selectedAnswer === QUESTIONS[currentQuestionIndex].answers[0]) {
+            setAnswerSet('correct");
+          } else{
+            setAnswerSet('wrong');
+          }
+        }, 1000);
       }, []);
   
 
