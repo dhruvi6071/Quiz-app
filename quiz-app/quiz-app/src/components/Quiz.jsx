@@ -19,7 +19,7 @@ export default function Quiz() {
 
         setTimeout(() => {
           if(selectedAnswer === QUESTIONS[currentQuestionIndex].answers[0]) {
-            setAnswerSet('correct");
+            setAnswerSet('correct');
           } else{
             setAnswerSet('wrong');
           }
